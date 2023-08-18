@@ -8,12 +8,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.example.demo.security.CustomAuthenticationSuccessHandler;
+import com.example.demo.security.CustomerAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -29,25 +29,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new CustomAuthenticationSuccessHandler();
 	}
 
-	@Autowired
-	private UserDetailsService customUserDetailsService;
+//	@Autowired
+//	private UserDetailsService customUserDetailsService;
 
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.userDetailsService(customUserDetailsService);
+//	}
+	
+	@Autowired
+	private CustomerAuthenticationProvider customerAuthenticationProvider;
+	
+	
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(customUserDetailsService);
+		auth.authenticationProvider(customerAuthenticationProvider);
 	}
-	
-	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// /login這個API可以不用登入就可以用 對應到controller的URL
 		http.authorizeHttpRequests().antMatchers("/login").permitAll()
-
 				// 剩下的所有請求都要登入才可以用
 				.anyRequest().authenticated().and()
 				.formLogin()
-				.usernameParameter("userName").passwordParameter("passWord").loginPage("/login").loginProcessingUrl("/userLogin").successHandler(successHandler());
+				.usernameParameter("userName")
+				.passwordParameter("passWord")
+				.loginPage("/login")
+				.loginProcessingUrl("/userLogin")
+				.successHandler(successHandler());
 	}
 
 	@Override

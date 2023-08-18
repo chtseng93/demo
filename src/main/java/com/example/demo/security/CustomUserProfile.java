@@ -29,6 +29,9 @@ public class CustomUserProfile implements UserDetails {
 
 		return list;
 	}
+	
+	
+	
 
 	@Override
 	public String getPassword() {
