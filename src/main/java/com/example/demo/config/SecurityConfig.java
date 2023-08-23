@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// login這個API可以不用登入就可以用 對應到controller的URL
 		http.authorizeHttpRequests().antMatchers("/login").permitAll()
-				// 剩下的所有請求都要登入才可以用
+				// 剩下的所有請求都要登入才可以用~
 				.anyRequest().authenticated().and()
 				.formLogin()
 				.usernameParameter("userName")
