@@ -20,7 +20,7 @@ import com.example.demo.mapper.UserMapper;
 public class CustomerAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
-	private UserMapper userMapper;
+	private UserMapper userMapper;//mybatis
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,7 +28,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 		Optional<String> pwd = Optional.of(authentication.getCredentials().toString());
 		String password = pwd.get();
 		
-		
+		//db ldap..sso..
 		 com.example.demo.entity.User user =  userMapper.getUserByName(userId);
 			
 		if(user == null) {
@@ -41,14 +41,15 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 //       		// 密碼前面加上"{noop}"使用NoOpPasswordEncoder，也就是不對密碼進行任何格式的編碼。
 //               .password("{noop}" + user.getPassWord())
 //               .roles("user").build();
-		
+		//登入的物件
 		CustomUserProfile userProfile = new CustomUserProfile();
 		userProfile.setUserName(user.getUserName());
-		userProfile.setPwd(user.getPassWord());
-		
+		userProfile.setPassWord(user.getPassWord());
+		userProfile.setRole("USER");
+		//給他一個腳色權限
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("user"));
-		
+		authorities.add(new SimpleGrantedAuthority("USER"));
+		//產生一個token存在SESSION ID裡 下次一個請求會cookie的jseesion去看有沒有token
 		return new UsernamePasswordAuthenticationToken(userProfile, password, authorities);
 	}
 

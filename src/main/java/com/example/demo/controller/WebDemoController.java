@@ -1,17 +1,19 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.exception.ActionException;
 import com.example.demo.model.req.EmployeeReq;
 import com.example.demo.model.req.UserReq;
-import com.example.demo.model.res.UserRes;
 import com.example.demo.service.WebDemoService;
-import com.mysql.cj.util.StringUtils;
 
 @Controller
 public class WebDemoController {
@@ -22,9 +24,9 @@ public class WebDemoController {
 	@GetMapping("/webDemo/index")
 	public String index(Model model) {
 		
-		
 		model.addAttribute("allemplist", webService.getEmployeeList());
-		
+		model.addAttribute("page", "fragments/employee");
+		model.addAttribute("feature", "employee");
 		return "index";
 	}
 	
@@ -90,6 +92,30 @@ public class WebDemoController {
     public String login() {
         return "login";
     }
+	
+	@GetMapping("/logine")
+    public String logine() {
+        throw new ActionException("請洽系統管理員!!");
+    }
+	
+
+	
+	@PostMapping("/register")
+	public String doRegister(@ModelAttribute("user") UserReq userReq,
+			RedirectAttributes redirectAttributes) {
+		System.out.println("=======>dodoRegister");
+		System.out.println("=======>UserName"+userReq.getUserName());
+		System.out.println("=======>UserPWD"+userReq.getPassWord());
+		Optional<String> optional = webService.register(userReq);
+		String message = optional.orElse("success");
+		if("success".equals(message)) {
+			redirectAttributes.addFlashAttribute("registerSuccessMessage", "Success!!Your account has been created!");
+			return "redirect:login";
+		}
+		System.out.println("=======>message"+message);
+		redirectAttributes.addFlashAttribute("errorMessage", message);
+		return "redirect:login";
+	}
 	
 //	@PostMapping("/userLogin")
 //    public String userlogin(@ModelAttribute("user") UserReq userReq) {

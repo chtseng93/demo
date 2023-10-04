@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.model.req.EmployeeReq;
 import com.example.demo.model.req.UserReq;
@@ -18,6 +19,8 @@ public interface WebDemoService {
 	public void saveEmployee(EmployeeReq req);
 	
 	public UserRes userLogin(UserReq userReq);
+	
+	public Optional<String> register(UserReq userReq);
 	
 
 }

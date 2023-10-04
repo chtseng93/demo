@@ -17,9 +17,10 @@ public class CustomUserProfile implements UserDetails {
 	String ROLE_PREFIX = "ROLE_";
 	private String userName;
 
-	private String pwd;
+	private String passWord;
 
 	private String role;
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -35,7 +36,7 @@ public class CustomUserProfile implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return pwd;
+		return passWord;
 	}
 
 	@Override

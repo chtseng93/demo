@@ -2,16 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Employee</title>
-<link rel="stylesheet" th:href="@{/css/sidebar.css}">
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-	crossorigin="anonymous">
+<title>sidebar</title>
+<link rel="stylesheet" href="/fragments/sidebar.css">
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<div class="content">
+<div class="content" th:fragment="employee">
 <h3>Employee List</h3>
 <a th:href="@{/addnew}" class="btn btn-primary btn-sm mb-3" >Add Employee</a>
 <form name ="employForm" method="post" th:object="${employee}">
@@ -41,27 +36,5 @@
 </table>
 </form>
 </div>
-<script>
-
-function deleteById(id,firstName, lastName) {
-	if(window.confirm('Are you sure you want to delete this employee : '+firstName+lastName+'?')){
-    	document.employForm.action="/webDemo/deleteEmployee";
-    	document.getElementById("empId").value=id
-    	console.log('deleteId='+document.getElementById("empId").value);
-    	document.employForm.submit();
-	}
-	
-}
-
-function updateById(id) {
-    document.employForm.action="/webDemo/updateEmployee";
-    document.getElementById("empId").value=id
-    console.log('updateId='+document.getElementById("empId").value);
-    document.employForm.submit();
-	
-	
-}
-
-</script>
 </body>
 </html>
