@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.mapper.UserMapper;
@@ -29,12 +30,16 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 		String password = pwd.get();
 		
 		//db ldap..sso..
-		 com.example.demo.entity.User user =  userMapper.getUserByName(userId);
+		com.example.demo.entity.User user =  userMapper.getUserByName(userId);
 			
 		if(user == null) {
 			 throw new UsernameNotFoundException(userId + " not found");
 		}
-		
+		System.out.println("==========>密碼:"+password);
+		if(!BCrypt.checkpw( password,user.getPassWord())) {
+			System.out.println("==========>密碼錯誤");
+			throw new UsernameNotFoundException(userId + " not found");
+		}
 //
 //		UserDetails userDetails = User.builder()
 //               .username(user.getUserName())

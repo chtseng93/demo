@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -122,14 +123,7 @@ public class WebDemoServiceImpl implements WebDemoService{
 		
 	}
 	
-	private String getMd5Password(String password, String salt) {
-		// 對password + salt 進行三次加密
-		String str = password + salt;
-		for (int i = 0; i < 3; i++) {
-			str = DigestUtils.md5DigestAsHex(str.getBytes()).toUpperCase();
-		}
-		return str;
-	}
+
 	@Override
 	public Optional<String> register(UserReq userReq) {
 		// TODO Auto-generated method stub
@@ -156,12 +150,13 @@ public class WebDemoServiceImpl implements WebDemoService{
 		// 新增MemberAccount 資料
 		User newUser  = new User();
 		newUser.setUserName(userReq.getUserName());
-		newUser.setPassWord(passwordEncoder.encode(userReq.getPassWord()));
+//		newUser.setPassWord(passwordEncoder.encode(userReq.getPassWord()));
+		newUser.setPassWord(BCrypt.hashpw(userReq.getPassWord(), BCrypt.gensalt()));
 		System.out.println("=======>newUser"+newUser.getPassWord());
 		userMapper.insertUser(newUser);
 		System.out.println("=======>returnUser"+userReq.getUserName());
 		User returnUser = userMapper.getUserByName(userReq.getUserName());
-		if(returnUser==null) return Optional.of("新增會員帳號時發生錯誤");
+		if(returnUser==null) return Optional.of("An error ocurred occurred while creating the new account!");
 		System.out.println("=======>returnUser"+returnUser.getPassWord());
 
 		

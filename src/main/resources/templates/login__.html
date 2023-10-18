@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login page</title>
+    <link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+  </head>
+  <body>
+    <h1>Login page</h1>
+    <p th:if="${param.error}" class="error">Wrong user or password</p>
+<!--     <p th:if="${loginError}" class="error">Wrong user or password</p> -->
+    <form th:action="@{/userLogin}" method="post" th:object="${user}">
+      <label for="username">Username</label>:
+      <input type="text" id="username" name="userName" autofocus="autofocus" /> <br />
+      <label for="password">Password</label>:
+      <input type="password" id="password" name="pwd" /> <br />
+      <input type="submit" value="Log in" />
+    </form>
+  </body>
+</html>

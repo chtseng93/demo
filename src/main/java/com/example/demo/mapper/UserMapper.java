@@ -20,7 +20,7 @@ public interface UserMapper {
 	@Select("select * from user_profile where user_name = #{userName}")
 	User getUserByName(String userName);
 	
-	
+
 	
 	@Insert("insert into user_profile(user_name,user_password) values(#{userName},#{passWord})")
 	void insertUser(User user);
